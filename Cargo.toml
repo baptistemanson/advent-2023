@@ -1,0 +1,16 @@
+[package]
+name = "advent-2023"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+fixedbitset = "0.4.2"
+itertools = "0.10.5"
+lazy_static = "1.4.0"
+regex = "1.7.0"
+thousands = "0.2.0"
+
+[profile.release]
+debug = true
