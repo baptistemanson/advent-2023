@@ -2,6 +2,7 @@
 #![feature(int_roundings)]
 
 use std::time::Instant;
+mod data2;
 mod day1;
 mod day2;
 mod debug;
