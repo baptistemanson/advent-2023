@@ -3,8 +3,10 @@
 
 use std::time::Instant;
 mod data2;
+mod data3;
 mod day1;
 mod day2;
+mod day3;
 mod debug;
 mod playground;
 use thousands::Separable;
@@ -20,6 +22,8 @@ fn execute(pb: String) {
         "12" => day1::pb2(),
         "21" => day2::pb1(),
         "22" => day2::pb2(),
+        "31" => day3::pb1(),
+        "32" => day3::pb2(),
         "playground" => playground::main(),
         _ => panic!("unknown problem"),
     };
