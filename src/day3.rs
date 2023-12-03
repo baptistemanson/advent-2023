@@ -82,11 +82,37 @@ fn flag_symbol(input: &Problem) -> Vec<Vec<bool>> {
     }
     output
 }
-// 898231723
-// 451023784 too high
+
 pub fn pb2() {
-    let expanded_matrix = expand(INPUT);
-    dbg!(exactly_2(&expanded_matrix));
+    let matrix = expand(INPUT); // instead of expand, we could simply check boundaries
+    let mut gears = vec![vec![(0, 0); matrix.dim_y]; matrix.dim_x];
+    for x in 1..matrix.dim_x - 1 {
+        let mut number: u32 = 0;
+        let mut number_len = 0;
+        for y in 1..matrix.dim_y - 1 {
+            if matrix.input[x][y].is_digit(10) {
+                number = number * 10 + matrix.input[x][y].to_digit(10).unwrap();
+                number_len += 1;
+            } else {
+                if number_len != 0 {
+                    // we have read a number, we will look around for gears
+                    for i in x - 1..=x + 1 {
+                        for j in y - number_len - 1..=y {
+                            if matrix.input[i][j] == '*' {
+                                gears[i][j] = merge(gears[i][j], number)
+                            }
+                        }
+                    }
+                }
+                number = 0;
+                number_len = 0;
+            }
+        }
+    }
+    dbg!(gears
+        .iter()
+        .map(|l| l.iter().filter(|c| c.0 == 2).map(|c| c.1).sum::<u32>())
+        .sum::<u32>());
 }
 
 fn merge((count, acc): (u32, u32), curr: u32) -> (u32, u32) {
@@ -98,71 +124,3 @@ fn merge((count, acc): (u32, u32), curr: u32) -> (u32, u32) {
         (3, 0)
     }
 }
-
-fn exactly_2(matrix: &Problem) -> u64 {
-    let mut gears = vec![vec![(0, 0); matrix.dim_y]; matrix.dim_x];
-    let mut curr: u32 = 0;
-    for x in 1..matrix.dim_x - 1 {
-        let mut len = 0;
-        for y in 1..matrix.dim_y - 1 {
-            let elem = matrix.input[x][y];
-            if elem == '.' || is_symbol(elem) {
-                if curr != 0 {
-                    for i in x - 1..=x + 1 {
-                        // we rewind one back
-                        for j in y - len - 1..=y {
-                            if matrix.input[i][j] == '*' {
-                                gears[i][j] = merge(gears[i][j], curr)
-                            }
-                        }
-                    }
-                }
-                curr = 0;
-                len = 0;
-            } else if elem.is_digit(10) {
-                curr = curr * 10 + elem.to_digit(10).unwrap();
-                len += 1;
-            }
-        }
-    }
-    gears
-        .iter()
-        .map(|l| {
-            l.iter().fold(
-                0 as u64,
-                |acc, c| {
-                    if c.0 == 2 {
-                        c.1 as u64 + acc
-                    } else {
-                        acc
-                    }
-                },
-            )
-        })
-        .sum()
-}
-const INPUT_T: &str = "467..114..
-...*......
-..35..633.
-......#...
-617*......
-.....+.58.
-..592.....
-......755.
-...$.*....
-.664.598..";
-
-const INPUT_3: &str = "..........700........................994....314......214....105.............................................#....137............*...522.....
-...153.....*.........685..283................*...151........*....#....232......$.......99.92...863....*.....567.....*.285.....69.....*......
-............205.........*..*..............275....*.........220...644...*....293.........$..%..*....337.91...............*.............963...
-.......................844.32......449..........932....................869....................77......................288...................";
-
-const INPUT_BAT: &str = ".........
-.........
-..10.100.
-....*....
-.........
-.........
-.........
-.........
-.........";
