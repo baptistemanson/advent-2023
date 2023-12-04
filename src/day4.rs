@@ -16,8 +16,8 @@ pub fn pb1() {
 
 fn nb_win(numbers: &str) -> usize {
     let (winning_nb, played_nb) = numbers.split_once("|").unwrap();
-    let winning_nb: HashSet<&str> = parse(winning_nb);
-    let played_nb: HashSet<&str> = parse(played_nb);
+    let winning_nb = parse(winning_nb);
+    let played_nb = parse(played_nb);
     played_nb.intersection(&winning_nb).count()
 }
 

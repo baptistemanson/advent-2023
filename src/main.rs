@@ -31,7 +31,7 @@ fn execute(pb: String) {
         _ => panic!("unknown problem"),
     };
     println!(
-        "took {} ms",
-        now.elapsed().as_millis().separate_with_commas()
+        "took {} us",
+        now.elapsed().as_micros().separate_with_commas()
     );
 }
