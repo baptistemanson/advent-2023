@@ -29,7 +29,6 @@ fn is_included(p: u64, rule: &TransformationRule) -> bool {
 }
 
 fn map(p: u64, rule: &TransformationRule) -> u64 {
-    println!("{} {}", p, rule[1]);
     rule[0] + (p - rule[1])
 }
 pub fn pb2() {
@@ -59,9 +58,7 @@ pub fn pb2() {
                     let cutoff = rule[1];
                     // necessarily not included in, as the fully included in is handled above
                     seed_ranges.push((iteration + 1, map(cutoff, rule), map(high, rule)));
-                    if cutoff > low {
-                        seed_ranges.push((iteration, low, cutoff - 1));
-                    }
+                    seed_ranges.push((iteration, low, cutoff - 1));
                     found_one = true;
                     break;
                 }
@@ -72,7 +69,8 @@ pub fn pb2() {
             }
         }
     }
-    dbg!(res.iter().min());
+    let m = res.iter().min();
+    dbg!(m);
 }
 
 fn parse(path: &str) -> (Vec<u64>, Vec<TransformationStep>) {
