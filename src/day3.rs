@@ -1,9 +1,4 @@
-use std::fmt::format;
-
-use crate::{
-    data3::INPUT,
-    debug::{display, display_bool},
-};
+use crate::data3::INPUT;
 
 type Input = Vec<Vec<char>>;
 struct Problem {
