@@ -38,25 +38,26 @@ pub fn pb2() {
         .chunks(2)
         .map(|w| (0, w[0], w[0] + w[1]))
         .collect::<Vec<_>>();
-    let mut result = vec![];
+    let mut result = u64::MAX;
     'work: while let Some((iteration, low, high)) = seed_ranges.pop() {
         if iteration == transformation_steps.len() {
-            result.push(low);
+            result = result.min(low);
         } else {
             for rule in &transformation_steps[iteration] {
                 if is_included(low, rule) {
                     let cutoff = high.min(rule[1] + rule[2]);
                     seed_ranges.push((iteration + 1, map(low, rule), map(cutoff, rule)));
                     if cutoff < high {
-                        // not fully included in
+                        // [low, high] = [low, cutoff] + [cutoff+1, high], if cutoff < high
                         seed_ranges.push((iteration, cutoff + 1, high));
                     }
                     continue 'work;
                 } else if is_included(high, rule) {
                     let cutoff = rule[1];
-                    // necessarily not included in, as the fully included in is handled above
-                    seed_ranges.push((iteration + 1, map(cutoff, rule), map(high, rule)));
+                    // [low, high] = [low, cutoff-1] + [cutoff, high],
+                    // as cutoff > low (otherwise its the previous if)
                     seed_ranges.push((iteration, low, cutoff - 1));
+                    seed_ranges.push((iteration + 1, map(cutoff, rule), map(high, rule)));
                     continue 'work;
                 }
             }
@@ -64,7 +65,7 @@ pub fn pb2() {
             seed_ranges.push((iteration + 1, low, high));
         }
     }
-    dbg!(result.iter().min());
+    dbg!(result);
 }
 
 fn parse(path: &str) -> (Vec<u64>, Vec<TransformationStep>) {
