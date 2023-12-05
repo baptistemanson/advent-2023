@@ -8,6 +8,7 @@ mod day1;
 mod day2;
 mod day3;
 mod day4;
+mod day5;
 mod debug;
 mod playground;
 use thousands::Separable;
@@ -27,6 +28,8 @@ fn execute(pb: String) {
         "32" => day3::pb2(),
         "41" => day4::pb1(),
         "42" => day4::pb2(),
+        "51" => day5::pb1(),
+        "52" => day5::pb2(),
         "playground" => playground::main(),
         _ => panic!("unknown problem"),
     };
