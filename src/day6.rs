@@ -4,23 +4,18 @@ use itertools::Itertools;
 
 pub fn pb1() {
     let (ts, ds) = parse("./src/day6.input.txt");
-    let a = -1;
     let mut tot = 1;
     for i in 0..ts.len() {
-        // valid while x(t-x) - d > 0
         // -x^2 +tx - d
-        let nb_better = resolve(a, ts[i], -ds[i]);
-        if nb_better > 0 {
-            tot *= nb_better;
-        }
+        tot *= resolve(-1, ts[i], -ds[i]);
     }
     dbg!(tot);
 }
 
 fn resolve(a: i64, b: i64, c: i64) -> i64 {
     let det = f64::sqrt((b * b - 4 * a * c) as f64);
-    let min = 1. / (2 * a) as f64 * (-b as f64 + det as f64);
-    let max = 1. / (2 * a) as f64 * (-b as f64 - det as f64);
+    let min = (-b as f64 + det) / (2. * a as f64);
+    let max = (-b as f64 - det) / (2. * a as f64);
     // double check
     let extrema_delta = match (max.fract() > 0., min.fract() > 0.) {
         (true, true) => 1,
@@ -32,7 +27,6 @@ fn resolve(a: i64, b: i64, c: i64) -> i64 {
     nb_better
 }
 
-// 39132881 too low
 // 39132886 good
 pub fn pb2() {
     let (ts, ds) = parse("./src/day6.input2.txt");
